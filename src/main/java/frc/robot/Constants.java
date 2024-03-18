@@ -48,4 +48,21 @@ public final class Constants
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT    = 6;
   }
+    public static class ShooterConstants
+  {
+
+    public static final int FEEDERMOTOR_DEVICE_ID = 21;
+    public static final int SHOOTERMOTOR_DEVICE_ID = 20;
+  }
+      public static class RollerClawConstants
+  {
+    public static final int ROLLERMOTOR_DEVICE_ID = 30;
+  }
+    public static class IntakeConstants
+  {
+    public static final int INTAKETOPMOTOR_DEVICE_ID = 51;
+    public static final int INTAKETBOTTOMMOTOR_DEVICE_ID = 52;
+    public static final int INTAKEROTATIONMOTOR_DEVICE_ID = 53;
+
+  }
 }
