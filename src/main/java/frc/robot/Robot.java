@@ -4,7 +4,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,6 +33,9 @@ public class Robot extends TimedRobot
 
   private Timer disabledTimer;
 
+
+
+
   public Robot()
   {
     instance = this;
@@ -41,6 +49,12 @@ public class Robot extends TimedRobot
   /**
    * This function is run when the robot is first started up and should be used for any initialization code.
    */
+
+  UsbCamera camera1;
+  UsbCamera camera2;
+  Joystick joy1 = new Joystick(0);
+  NetworkTableEntry cameraSelection;
+
   @Override
   public void robotInit()
   {
@@ -51,6 +65,13 @@ public class Robot extends TimedRobot
     // Create a timer to disable motor brake a few seconds after disable.  This will let the robot stop
     // immediately when disabled, but then also let it be pushed more 
     disabledTimer = new Timer();
+  
+    camera1 = CameraServer.startAutomaticCapture(0);
+    //camera2 = CameraServer.startAutomaticCapture(1);
+
+    camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+    //camera2.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+  
   }
 
   /**
@@ -98,7 +119,7 @@ public class Robot extends TimedRobot
   public void autonomousInit()
   {
     m_robotContainer.setMotorBrake(true);
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    //m_autonomousCommand = m_robotContainer.getAutonomousCommand("1A1");
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null)

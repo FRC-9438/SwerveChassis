@@ -51,8 +51,9 @@ public final class Constants
     public static class ShooterConstants
   {
 
-    public static final int FEEDERMOTOR_DEVICE_ID = 21;
-    public static final int SHOOTERMOTOR_DEVICE_ID = 20;
+    public static final int SHOOTERMOTORLEFT_DEVICE_ID = 60;
+    public static final int SHOOTERMOTORRIGHT_DEVICE_ID = 61;
+
   }
       public static class RollerClawConstants
   {
@@ -60,9 +61,13 @@ public final class Constants
   }
     public static class IntakeConstants
   {
-    public static final int INTAKETOPMOTOR_DEVICE_ID = 51;
-    public static final int INTAKETBOTTOMMOTOR_DEVICE_ID = 52;
+    public static final int INTAKEINMOTOR_DEVICE_ID = 51;
     public static final int INTAKEROTATIONMOTOR_DEVICE_ID = 53;
+
+  }
+      public static class ClimberConstants
+  {
+    public static final int CLIMBERMOTOR_DEVICE_ID = 40;
 
   }
 }

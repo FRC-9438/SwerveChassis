@@ -16,20 +16,32 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.RollerClaw.RollerClawInCommand;
-import frc.robot.commands.RollerClaw.RollerClawOutCommand;
+import frc.robot.commands.Climber.ClimbDownCommand;
+import frc.robot.commands.Climber.ClimbUpCommand;
+import frc.robot.commands.Intake.IntakeDownCommand;
+import frc.robot.commands.Intake.IntakeInCommand;
+import frc.robot.commands.Intake.IntakeOutCommand;
+import frc.robot.commands.Intake.IntakeUpCommand;
+//import frc.robot.commands.RollerClaw.RollerClawInCommand;
+//import frc.robot.commands.RollerClaw.RollerClawOutCommand;
 import frc.robot.commands.Shooter.ShooterOutCommand;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
-import frc.robot.subsystems.rollerclaw.RollerClawSubsytem;
+import frc.robot.subsystems.climb.ClimberSubsystem;
+import frc.robot.subsystems.intake.IntakeSubsytem;
+//import frc.robot.subsystems.rollerclaw.RollerClawSubsytem;
 import frc.robot.subsystems.shooter.ShooterSubsytem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
+import com.pathplanner.lib.auto.NamedCommands;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
  * Instead, the structure of the robot (including subsystems, commands, and trigger mappings) should be declared here.
  */
+
+ 
 public class RobotContainer
 {
 
@@ -39,7 +51,9 @@ public class RobotContainer
 
 
   private final ShooterSubsytem shooter = new ShooterSubsytem();
-  private final RollerClawSubsytem rollerclaw = new RollerClawSubsytem();
+  //private final RollerClawSubsytem rollerclaw = new RollerClawSubsytem();
+  private final IntakeSubsytem intake = new IntakeSubsytem();
+  private final ClimberSubsystem climber = new ClimberSubsystem();
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -95,6 +109,12 @@ public class RobotContainer
 
     drivebase.setDefaultCommand(
         !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
+
+    NamedCommands.registerCommand("Intake In", new IntakeInCommand(intake));
+    NamedCommands.registerCommand("Intake Out", new IntakeOutCommand(intake));
+    NamedCommands.registerCommand("Intake Up", new IntakeUpCommand(intake));
+    NamedCommands.registerCommand("Intake Down", new IntakeDownCommand(intake));
+    NamedCommands.registerCommand("Shoot", new ShooterOutCommand(shooter, intake));
   }
 
   /**
@@ -116,9 +136,19 @@ public class RobotContainer
                               ));
     
 
-    operatorXbox.a().whileTrue(new ShooterOutCommand(shooter));
-    operatorXbox.x().whileTrue(new RollerClawInCommand(rollerclaw));      
-    operatorXbox.y().whileTrue(new RollerClawOutCommand(rollerclaw));                        
+    //shooter                           
+    operatorXbox.a().whileTrue(new ShooterOutCommand(shooter, intake));
+    //rollerclaw
+    //operatorXbox.x().whileTrue(new RollerClawInCommand(rollerclaw));      
+    //operatorXbox.y().whileTrue(new RollerClawOutCommand(rollerclaw)); 
+    //intake
+    operatorXbox.leftBumper().whileTrue(new IntakeUpCommand(intake));
+    operatorXbox.rightBumper().whileTrue(new IntakeDownCommand(intake));
+    operatorXbox.povRight().whileTrue(new IntakeInCommand(intake));
+    operatorXbox.povLeft ().whileTrue(new IntakeOutCommand(intake));
+    //climber
+    operatorXbox.povUp().whileTrue(new ClimbUpCommand(climber));
+    operatorXbox.povDown().whileTrue(new ClimbDownCommand(climber));
                   
     // driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
   }
@@ -128,10 +158,18 @@ public class RobotContainer
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand()
+  public Command getAutonomousCommand(String a)
   {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("New Auto");
+    Command autoCommand = null;
+
+    switch(a) {
+      case "1A1":
+        autoCommand = drivebase.getAutonomousCommand("1-A-1 Auto");
+        break;
+    }
+
+    return autoCommand;
   }
 
   public void setDriveMode()
